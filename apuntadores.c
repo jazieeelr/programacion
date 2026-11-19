@@ -1,62 +1,54 @@
-/*
- * Ejemplo básico de apuntadores en C
- *
- * Compilar:  gcc -Wall -o apuntadores apuntadores.c
- * Ejecutar:  ./apuntadores
- */
 #include <stdio.h>
+void inter(int *x, int *y);
 
-/* Recibe las direcciones de dos variables e intercambia sus valores */
-void intercambiar(int *a, int *b) {
-    int temp = *a;   /* *a = valor guardado en la dirección a */
-    *a = *b;
-    *b = temp;
+int main(){
+   int numero=10,x=3,y=7,i;
+   int *ap,*p,**q,*nulo;
+   int a[]={1,2,3,4,5};
+
+   //1. Declarar una variable y un apuntador a ella
+   ap=&numero;
+   printf("\n1. Conceptos basicos\n");
+   printf("\nContenido de numero: %d",numero);
+   printf("\nDireccion de numero: %p",&numero);
+   printf("\nContenido de ap: %p",ap);
+   printf("\nContenido de la variable a la que apunta ap: %d",*ap);
+
+   //2. Modificar la variable a traves del apuntador
+   *ap=25;
+   printf("\n\n2. Modificar mediante el apuntador\n");
+   printf("\nDespues de *ap=25, numero vale: %d",numero);
+
+   //3. Paso por referencia a una funcion
+   printf("\n\n3. Paso por referencia\n");
+   printf("\nAntes de inter: x = %d, y = %d",x,y);
+   inter(&x,&y);
+   printf("\nDespues de inter: x = %d, y = %d",x,y);
+
+   //4. Apuntadores y arreglos
+   p=a;
+   printf("\n\n4. Apuntadores y arreglos\n");
+   for(i=0;i<5;i++){
+      printf("\na[%d] = %d   *(p + %d) = %d   direccion: %p",i,a[i],i,*(p+i),p+i);
+   }
+
+   //5. Apuntador a apuntador
+   q=&ap;
+   printf("\n\n5. Apuntador a apuntador\n");
+   printf("\n**q = %d (mismo valor que numero)",**q);
+
+   //6. Apuntador nulo
+   nulo=NULL;
+   printf("\n\n6. Apuntador NULL\n");
+   if(nulo==NULL){
+      printf("\nEl apuntador es NULL, no se debe usar *nulo\n");
+   }
+   return 0;
 }
 
-int main(void) {
-    /* 1. Declarar una variable y un apuntador a ella */
-    int numero = 10;
-    int *ptr = &numero;   /* & obtiene la dirección de 'numero' */
-
-    printf("=== 1. Conceptos basicos ===\n");
-    printf("Valor de numero:          %d\n", numero);
-    printf("Direccion de numero:      %p\n", (void *)&numero);
-    printf("Valor de ptr (direccion): %p\n", (void *)ptr);
-    printf("Valor apuntado (*ptr):    %d\n", *ptr);
-
-    /* 2. Modificar la variable a través del apuntador */
-    *ptr = 25;
-    printf("\n=== 2. Modificar mediante el apuntador ===\n");
-    printf("Despues de *ptr = 25, numero vale: %d\n", numero);
-
-    /* 3. Paso por referencia a una función */
-    int x = 3, y = 7;
-    printf("\n=== 3. Paso por referencia ===\n");
-    printf("Antes:   x = %d, y = %d\n", x, y);
-    intercambiar(&x, &y);
-    printf("Despues: x = %d, y = %d\n", x, y);
-
-    /* 4. Apuntadores y arreglos (aritmética de apuntadores) */
-    int arreglo[5] = {1, 2, 3, 4, 5};
-    int *p = arreglo;     /* el nombre del arreglo es la dirección de su primer elemento */
-
-    printf("\n=== 4. Apuntadores y arreglos ===\n");
-    for (int i = 0; i < 5; i++) {
-        printf("arreglo[%d] = %d  |  *(p + %d) = %d  |  direccion: %p\n",
-               i, arreglo[i], i, *(p + i), (void *)(p + i));
-    }
-
-    /* 5. Apuntador a apuntador */
-    int **pp = &ptr;
-    printf("\n=== 5. Apuntador a apuntador ===\n");
-    printf("**pp = %d (mismo valor que numero)\n", **pp);
-
-    /* 6. Apuntador nulo */
-    int *nulo = NULL;
-    printf("\n=== 6. Apuntador NULL ===\n");
-    if (nulo == NULL) {
-        printf("El apuntador es NULL: no se debe desreferenciar.\n");
-    }
-
-    return 0;
+void inter(int *x, int *y){
+   int aux;
+   aux=*x;
+   *x=*y;
+   *y=aux;
 }

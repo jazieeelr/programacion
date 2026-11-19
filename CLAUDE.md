@@ -1,34 +1,129 @@
 # Instrucciones para Claude
 
-## Regla obligatoria: usar solo lo que está en los PDFs del repositorio
+## Regla obligatoria: todo se hace solo con lo que está en los PDFs del repositorio
 
-Cuando se te pida **realizar, escribir o modificar un programa**, SOLO puedes usar
-las herramientas que aparecen en los archivos PDF de este repositorio.
+**Cualquier cosa que se pida** (programas, correcciones, ejemplos, ejercicios,
+explicaciones) se debe hacer ÚNICAMENTE con:
 
-"Herramientas" incluye, entre otras cosas:
+1. **Las herramientas** que aparecen en los PDFs del repositorio.
+2. **El tipo de escritura** (estilo de código y forma de explicar) de esos PDFs.
 
-- Lenguaje y versión del lenguaje.
-- Bibliotecas y cabeceras (por ejemplo `#include <...>`).
-- Funciones, macros, tipos de datos y palabras reservadas.
-- Estructuras de control y construcciones del lenguaje.
-- Técnicas o estilos de programación (por ejemplo recursión, memoria dinámica,
-  estructuras, archivos, apuntadores).
-- Compilador, opciones de compilación y comandos para ejecutar.
+Los PDFs son las notas del curso *Programación Estructurada en Entorno Unix*:
 
-### Cómo aplicar la regla
+| Archivo | Unidad |
+|---|---|
+| `PEeU1.pdf` | 1. Introducción a la programación estructurada |
+| `PEeU2.pdf` | 2. Tipos de datos y expresiones |
+| `PEeU3.pdf` | 3. Estructuras de control |
+| `PEeU4.pdf` | 4. Arreglos y estructuras |
+| `PEeU5.pdf` | 5. Funciones |
+| `PEeU6.pdf` | 6. Apuntadores y archivos |
 
-1. **Antes de escribir código**, busca y lee todos los PDFs del repositorio
-   (por ejemplo con `find . -iname "*.pdf"`) para saber qué herramientas están
-   permitidas.
-2. Usa únicamente lo que aparece explícitamente en esos PDFs. Si algo no aparece
-   en ningún PDF, **no lo uses**, aunque sea común o "más fácil".
-3. Si el programa no se puede hacer solo con lo que está en los PDFs, **no
-   inventes ni sustituyas** con otras herramientas: avisa qué falta y pregunta
-   antes de continuar.
-4. Si no hay ningún PDF en el repositorio, avisa y pregunta antes de escribir
-   el programa.
-5. Al entregar el programa, indica brevemente en qué PDF(s) se basa cada
-   herramienta usada.
+Si algo no aparece en ningún PDF, **no se usa**, aunque sea común, "más fácil" o
+"mejor práctica". Si lo pedido no se puede hacer solo con lo de los PDFs, **no se
+inventa ni se sustituye**: se avisa qué falta y se pregunta antes de continuar.
+Si se agregan PDFs nuevos, se leen y también cuentan.
 
 Esta regla tiene prioridad sobre cualquier preferencia o costumbre propia. Solo
 puede romperse si se pide de forma explícita en la conversación.
+
+---
+
+## Herramientas permitidas (resumen de los PDFs)
+
+Ante la duda, la fuente es el PDF, no esta lista.
+
+- **Lenguaje:** C.
+- **Bibliotecas:** `stdio.h`, `stdlib.h`, `string.h`, `ctype.h`, `math.h`.
+- **Tipos y declaraciones (U2):** `char`, `int`, `float`, `double`, `short`,
+  `long`, `unsigned`, `long double`, `const`, `#define`, cast `(tipo)`, `sizeof`,
+  `static`, `extern`, variables globales y locales.
+- **Operadores (U2):** aritméticos (`+ - * / %`), `++`, `--`, relacionales,
+  lógicos (`&& || !`), asignación compuesta (`+=`, `-=`, `*=`, ...), condicional `?:`.
+- **Control (U3):** `if`, `if-else`, `switch`/`case`/`default`, `for`, `while`,
+  `do-while`, `break`, `continue`.
+- **Arreglos y estructuras (U4):** arreglos de una y varias dimensiones, cadenas
+  (`char cad[]`), `struct`, arreglos de estructuras, operador punto `.`.
+- **Funciones (U5):** prototipos, `return`, `void`, paso por valor, paso por
+  referencia con apuntadores, recursividad, pasar arreglos a funciones.
+- **Apuntadores (U6):** `&`, `*`, aritmética y comparación de apuntadores,
+  arreglos de apuntadores, apuntador a apuntador (`**`), apuntadores a función, `NULL`.
+- **E/S de consola:** `printf`, `scanf`, `gets`, `puts`, `getchar`, `putchar`.
+  Formatos de `printf`: `%c %d %i %e %f %g %o %s %u %x %X %p %ld %lu %hd %Lf %%`.
+  Formatos de `scanf`: los mismos, más `%lf` para `double`.
+  Secuencias de escape de U2 (`\n`, `\t`, `\\`, `\"`, ...).
+- **Cadenas y caracteres:** `strcpy`, `strlen`, `strcmp`, `strncmp`, `toupper`,
+  `tolower`, `islower`, `atol`.
+- **Matemáticas (U5):** `sqrt`, `exp`, `log`, `log10`, `fabs`, `ceil`, `floor`,
+  `pow`, `fmod`, `sin`, `cos`, `tan`.
+- **Archivos (U6):** `FILE *`, `fopen` (modos de la tabla 6.2), `fclose`, `getc`,
+  `putc`, `fputc`, `getw`, `putw`, `fgets`, `fputs`, `fread`, `fwrite`, `fseek`
+  (`SEEK_SET`, `SEEK_CUR`, `SEEK_END`), `ftell`, `rewind`, `feof`, `ferror`,
+  `perror`, `fprintf`, `fscanf`, `remove`, `stdin`, `EOF`.
+- **Otras:** `exit`.
+
+### NO permitido (no aparece en los PDFs o no sirve en Unix)
+
+- `rand()`, `srand()`, `time()`, `malloc()`, `free()`, `typedef`, `enum`, `union`,
+  `bool`, ni ninguna otra función o biblioteca que no esté arriba.
+- `conio.h` (`gotoxy`, `clrscr`, `getch`, `getche`): aparece en los PDFs, pero no
+  existe en Unix/Linux. Si un programa la necesita, se pregunta antes.
+- `goto`: solo aparece en U1 como ejemplo de lo que la programación estructurada evita.
+- Declarar variables dentro del `for` (`for(int i=0; ...)`) o a mitad de un bloque.
+
+---
+
+## Tipo de escritura del código (como en los PDFs)
+
+```c
+#include <stdio.h>
+int cuad(int x);
+
+int main(){
+   int n=10;
+   printf("El cuadrado de %d es %d",n,cuad(n));
+   return 0;
+}
+
+int cuad(int x){
+   x=x*x;
+   return x;
+}
+```
+
+- `#include` al inicio, después los `#define`, las variables globales y los
+  **prototipos de las funciones**.
+- `int main(){` con la llave en la misma línea, y termina con `return 0;`.
+- Las funciones propias se **definen después de `main`**.
+- Sangría de **3 espacios**; llave de apertura en la misma línea
+  (`for(i=0;i<10;i++){`, `if(x>max){`, `}else{`).
+- Escritura compacta, sin espacios alrededor de operadores ni después de comas
+  (`for(i=0;i<10;i++)`, `printf("%d",n);`).
+- **Todas las variables se declaran al inicio** de la función.
+- Nombres de variables y funciones en español, cortos y en minúsculas
+  (`cuenta`, `aux`, `maxi`, `inter`, `desp`).
+- Mensajes en español; los saltos de línea suelen ir al inicio del texto
+  (`printf("\nX = %d",x);`).
+- Comentarios cortos con `//`.
+- Para abrir archivos se usa el patrón de los PDFs:
+  `if((fp=fopen(archivo,"r"))==NULL){ printf("ERROR: No se puede abrir el archivo\n"); exit(1); }`.
+
+## Tipo de escritura de las explicaciones
+
+- En español, con el mismo tono de las notas: primero el concepto, después
+  "Observe el siguiente programa" con el código, y al final un párrafo que
+  explique qué hace el programa ("El programa ...").
+- Usar los mismos términos que los PDFs: *apuntador*, *arreglo*, *cadena*,
+  *prototipo de función*, *paso por valor / por referencia*, *caso base*, etc.
+
+---
+
+## Cómo aplicar la regla
+
+1. Antes de escribir, revisar los PDFs (con `pdftotext` o leyéndolos) para
+   confirmar que cada herramienta aparece en ellos.
+2. Escribir con el estilo descrito arriba.
+3. Al entregar, indicar en qué unidad (PDF) aparece cada herramienta usada que
+   no sea obvia.
+4. Si algo no está en los PDFs: avisar qué falta y preguntar. Nunca sustituirlo
+   en silencio.
