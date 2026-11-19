@@ -127,3 +127,15 @@ int cuad(int x){
    no sea obvia.
 4. Si algo no está en los PDFs: avisar qué falta y preguntar. Nunca sustituirlo
    en silencio.
+
+## Entrega de programas
+
+- Cada programa se entrega como **archivo `.c` para descargar** (enviarlo con la
+  herramienta de envío de archivos), además de guardarlo en el repositorio.
+- El usuario revisa el archivo en **nano** y **lo compila él mismo**: no dar
+  instrucciones de compilación ni de ejecución, y no pegar el código completo en
+  el chat salvo que se pida.
+- El archivo debe verse bien en nano: texto plano, sangría con espacios (no
+  tabuladores) y líneas de no más de 80 caracteres cuando sea posible.
+- Antes de entregarlo, compilarlo internamente para confirmar que no tiene
+  errores (esto es solo una verificación; no forma parte de la entrega).

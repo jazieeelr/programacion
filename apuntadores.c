@@ -29,7 +29,8 @@ int main(){
    p=a;
    printf("\n\n4. Apuntadores y arreglos\n");
    for(i=0;i<5;i++){
-      printf("\na[%d] = %d   *(p + %d) = %d   direccion: %p",i,a[i],i,*(p+i),p+i);
+      printf("\na[%d] = %d   *(p + %d) = %d",i,a[i],i,*(p+i));
+      printf("   direccion: %p",p+i);
    }
 
    //5. Apuntador a apuntador
