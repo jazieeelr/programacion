@@ -8,13 +8,13 @@ int main(){
    int indice_pico[1000];
    int total_puntos,vecinos,ventana,total_picos,caracter,i,m;
 
-   if((archivo=fopen("espectro.txt","r"))==NULL){
-      printf("ERROR: No se puede abrir el archivo espectro.txt\n");
+   if((archivo=fopen("espectro.dat","r"))==NULL){
+      printf("ERROR: No se puede abrir el archivo espectro.dat\n");
       exit(1);
    }
    caracter=getc(archivo);
    if(caracter==EOF){
-      printf("ERROR: El archivo espectro.txt esta vacio\n");
+      printf("ERROR: El archivo espectro.dat esta vacio\n");
       exit(1);
    }
    rewind(archivo);
@@ -24,7 +24,7 @@ int main(){
       total_puntos=total_puntos+1;
    }
    fclose(archivo);
-   printf("\nSe leyeron %d puntos del archivo espectro.txt",total_puntos);
+   printf("\nSe leyeron %d puntos del archivo espectro.dat",total_puntos);
 
    printf("\nIngrese el numero de vecinos k: ");
    scanf("%d",&vecinos);
@@ -64,7 +64,7 @@ int main(){
    printf("\nVentana w = %d (k = %d), umbral = %.1f",ventana,vecinos,umbral);
    printf("\nPicos encontrados: %d",total_picos);
    for(i=0;i<total_picos;i++){
-      printf("\nIndice: %d   Longitud de onda: %.1f   Intensidad suave: %.2f",
+      printf("\nIndice: %d   Lambda: %.1f   Intensidad suave: %.2f",
              indice_pico[i],picos[i],inten_suave[indice_pico[i]]);
    }
 
@@ -74,16 +74,15 @@ int main(){
    }
    fprintf(archivo,"RESUMEN DE PICOS\n");
    fprintf(archivo,"Picos encontrados: %d\n",total_picos);
-   fprintf(archivo,"indice\tlongitud_onda\tintensidad_suave\n");
+   fprintf(archivo,"indice\tlambda\tintensidad_suave\n");
    for(i=0;i<total_picos;i++){
-      fprintf(archivo,"%d\t%.1f\t\t%.2f\n",
+      fprintf(archivo,"%d\t%.1f\t%.2f\n",
               indice_pico[i],picos[i],inten_suave[indice_pico[i]]);
    }
    fprintf(archivo,"\nSERIE COMPLETA\n");
-   fprintf(archivo,"longitud_onda\tintensidad_raw\tintensidad_suave\n");
+   fprintf(archivo,"lambda\tintensidad_raw\tintensidad_suave\n");
    for(i=0;i<total_puntos;i++){
-      fprintf(archivo,"%.1f\t\t%.2f\t\t%.2f\n",
-              wl[i],inten[i],inten_suave[i]);
+      fprintf(archivo,"%.1f\t%.2f\t\t%.2f\n",wl[i],inten[i],inten_suave[i]);
    }
    fclose(archivo);
    printf("\nSe genero el archivo reporte.txt\n");
