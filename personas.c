@@ -62,8 +62,7 @@ int menu(void){
 void agregar(void){
    FILE *fp;
    char archivo[]="personas.bin";
-   int dias[12]={31,29,31,30,31,30,31,31,30,31,30,31};
-   int op,bisiesto;
+   int op;
    if((fp=fopen(archivo,"ab"))==NULL){
       printf("ERROR: No se puede abrir el archivo\n");
       exit(1);
@@ -73,25 +72,20 @@ void agregar(void){
    do{
       printf("Edad: ");
       reg.edad=leerent();
-   }while(reg.edad<0 || reg.edad>150);
+   }while(reg.edad<0);
    printf("Fecha de nacimiento\n");
    do{
-      printf("   Anio: ");
-      reg.anio=leerent();
-   }while(reg.anio<1900 || reg.anio>2100);
+      printf("   Dia (1-31): ");
+      reg.dia=leerent();
+   }while(reg.dia<1 || reg.dia>31);
    do{
       printf("   Mes (1-12): ");
       reg.mes=leerent();
    }while(reg.mes<1 || reg.mes>12);
-   //febrero tiene 29 dias solo en anio bisiesto
-   bisiesto=(reg.anio%4==0 && reg.anio%100!=0) || reg.anio%400==0;
-   if(!bisiesto){
-      dias[1]=28;
-   }
    do{
-      printf("   Dia (1-%d): ",dias[reg.mes-1]);
-      reg.dia=leerent();
-   }while(reg.dia<1 || reg.dia>dias[reg.mes-1]);
+      printf("   Anio: ");
+      reg.anio=leerent();
+   }while(reg.anio<0);
    printf("Direccion: ");
    leercad(reg.direccion,ndir);
    do{

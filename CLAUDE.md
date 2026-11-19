@@ -128,6 +128,13 @@ int cuad(int x){
 4. Si algo no está en los PDFs: avisar qué falta y preguntar. Nunca sustituirlo
    en silencio.
 
+## Programas lo más generales posible
+
+Salvo que se indique lo contrario, los ejercicios se resuelven de la forma más
+general y sencilla: solo lo que se pide. No se agregan casos especiales ni
+validaciones de más (por ejemplo, años bisiestos o días por mes en una fecha;
+basta con día 1-31 y mes 1-12).
+
 ## Entrega de programas
 
 - Cada programa se entrega como **archivo `.c` para descargar** (enviarlo con la
