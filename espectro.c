@@ -1,100 +1,88 @@
 #include <stdio.h>
 #include <stdlib.h>
-int cargar(char *archivo,float wl[],float inten[]);
-void suavizar(float inten[],float suave[],int n,int k);
-int detectar(float wl[],float suave[],int n,float umbral,
-             float picos[],int ipico[]);
-void reporte(char *archivo,float wl[],float inten[],float suave[],int n,
-             float picos[],int ipico[],int np);
 
 int main(){
-   float wl[1000],inten[1000],inten_suave[1000],picos[1000],umbral;
-   int ipico[1000],n,k,np,i;
-   n=cargar("espectro.dat",wl,inten);
-   printf("\nSe leyeron %d puntos de espectro.dat",n);
-   printf("\nTamano de la ventana w=2k+1, ingrese k: ");
-   scanf("%d",&k);
+   FILE *archivo;
+   float wl[1000],inten[1000],inten_suave[1000],picos[1000];
+   float umbral,suma;
+   int indice_pico[1000];
+   int total_puntos,vecinos,ventana,total_picos,caracter,i,m;
+
+   if((archivo=fopen("espectro.dat","r"))==NULL){
+      printf("ERROR: No se puede abrir el archivo espectro.dat\n");
+      exit(1);
+   }
+   caracter=getc(archivo);
+   if(caracter==EOF){
+      printf("ERROR: El archivo espectro.dat esta vacio\n");
+      exit(1);
+   }
+   rewind(archivo);
+   total_puntos=0;
+   while(!feof(archivo)){
+      fscanf(archivo,"%f %f\n",&wl[total_puntos],&inten[total_puntos]);
+      total_puntos=total_puntos+1;
+   }
+   fclose(archivo);
+   printf("\nSe leyeron %d puntos del archivo espectro.dat",total_puntos);
+
+   printf("\nIngrese el numero de vecinos k: ");
+   scanf("%d",&vecinos);
    printf("Ingrese el umbral: ");
    scanf("%f",&umbral);
-   suavizar(inten,inten_suave,n,k);
-   np=detectar(wl,inten_suave,n,umbral,picos,ipico);
-   printf("\nVentana w = %d (k = %d), umbral = %.1f",2*k+1,k,umbral);
-   printf("\nPicos encontrados: %d",np);
-   for(i=0;i<np;i++){
-      printf("\n   Indice %d   lambda = %.1f nm   I = %.2f",
-             ipico[i],picos[i],inten_suave[ipico[i]]);
+   ventana=2*vecinos+1;
+
+   for(i=0;i<total_puntos;i++){
+      if(i<vecinos){
+         inten_suave[i]=inten[i];
+      }else if(i>=total_puntos-vecinos){
+         inten_suave[i]=inten[i];
+      }else{
+         suma=0;
+         for(m=-vecinos;m<=vecinos;m++){
+            suma=suma+inten[i+m];
+         }
+         inten_suave[i]=suma/ventana;
+      }
    }
-   reporte("reporte.txt",wl,inten,inten_suave,n,picos,ipico,np);
+
+   total_picos=0;
+   for(i=1;i<total_puntos-1;i++){
+      if(inten_suave[i]>inten_suave[i-1]){
+         if(inten_suave[i]>inten_suave[i+1]){
+            if(inten_suave[i]>umbral){
+               picos[total_picos]=wl[i];
+               indice_pico[total_picos]=i;
+               total_picos=total_picos+1;
+            }
+         }
+      }
+   }
+
+   printf("\nVentana w = %d (k = %d), umbral = %.1f",ventana,vecinos,umbral);
+   printf("\nPicos encontrados: %d",total_picos);
+   for(i=0;i<total_picos;i++){
+      printf("\nIndice: %d   Lambda: %.1f   Intensidad suave: %.2f",
+             indice_pico[i],picos[i],inten_suave[indice_pico[i]]);
+   }
+
+   if((archivo=fopen("reporte.txt","w"))==NULL){
+      printf("ERROR: No se puede abrir el archivo reporte.txt\n");
+      exit(1);
+   }
+   fprintf(archivo,"RESUMEN DE PICOS\n");
+   fprintf(archivo,"Picos encontrados: %d\n",total_picos);
+   fprintf(archivo,"indice\tlambda\tintensidad_suave\n");
+   for(i=0;i<total_picos;i++){
+      fprintf(archivo,"%d\t%.1f\t%.2f\n",
+              indice_pico[i],picos[i],inten_suave[indice_pico[i]]);
+   }
+   fprintf(archivo,"\nSERIE COMPLETA\n");
+   fprintf(archivo,"lambda\tintensidad_raw\tintensidad_suave\n");
+   for(i=0;i<total_puntos;i++){
+      fprintf(archivo,"%.1f\t%.2f\t\t%.2f\n",wl[i],inten[i],inten_suave[i]);
+   }
+   fclose(archivo);
    printf("\nSe genero el archivo reporte.txt\n");
    return 0;
-}
-
-int cargar(char *archivo,float wl[],float inten[]){
-   FILE *fp;
-   int n=0;
-   if((fp=fopen(archivo,"r"))==NULL){
-      printf("ERROR: No se puede abrir el archivo %s\n",archivo);
-      exit(1);
-   }
-   fseek(fp,0L,SEEK_END);
-   if(ftell(fp)==0){
-      printf("ERROR: El archivo %s esta vacio\n",archivo);
-      exit(1);
-   }
-   rewind(fp);
-   while(!feof(fp)&&n<1000){
-      fscanf(fp,"%f %f\n",&wl[n],&inten[n]);
-      n++;
-   }
-   fclose(fp);
-   return n;
-}
-
-void suavizar(float inten[],float suave[],int n,int k){
-   int i,m;
-   float suma;
-   for(i=0;i<n;i++){
-      if(i<k||i>=n-k){
-         suave[i]=inten[i];
-      }else{
-         suma=0.0;
-         for(m=-k;m<=k;m++)
-            suma+=inten[i+m];
-         suave[i]=suma/(2*k+1);
-      }
-   }
-}
-
-int detectar(float wl[],float suave[],int n,float umbral,
-             float picos[],int ipico[]){
-   int i,np=0;
-   for(i=1;i<n-1;i++){
-      if(suave[i]>suave[i-1]&&suave[i]>suave[i+1]&&suave[i]>umbral){
-         picos[np]=wl[i];
-         ipico[np]=i;
-         np++;
-      }
-   }
-   return np;
-}
-
-void reporte(char *archivo,float wl[],float inten[],float suave[],int n,
-             float picos[],int ipico[],int np){
-   FILE *fp;
-   int i;
-   if((fp=fopen(archivo,"w"))==NULL){
-      printf("ERROR: No se puede abrir el archivo %s\n",archivo);
-      exit(1);
-   }
-   fprintf(fp,"RESUMEN DE PICOS\n");
-   fprintf(fp,"Picos encontrados: %d\n",np);
-   fprintf(fp,"%8s %10s %18s\n","indice","lambda","intensidad_suave");
-   for(i=0;i<np;i++)
-      fprintf(fp,"%8d %10.1f %18.2f\n",ipico[i],picos[i],suave[ipico[i]]);
-   fprintf(fp,"\nSERIE COMPLETA\n");
-   fprintf(fp,"%10s %16s %18s\n","lambda","intensidad_raw",
-           "intensidad_suave");
-   for(i=0;i<n;i++)
-      fprintf(fp,"%10.1f %16.2f %18.2f\n",wl[i],inten[i],suave[i]);
-   fclose(fp);
 }
