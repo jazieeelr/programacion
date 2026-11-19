@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define F 6   //intervalos de tiempo
-#define S 5   //sensores
+#define F 6
+#define S 5
 void leer(char *archivo,float t[][S]);
 void mostrar(float t[][S]);
 void promedios(float t[][S],float psen[],float pint[]);
@@ -12,13 +12,9 @@ void reporte(char *archivo,float t[][S],float psen[],float pint[],
 int main(){
    float t[F][S],psen[S],pint[F],delta[S],maxi,mini;
    int i,j,smax,imax,smin,imin,sinc,iguales;
-   //1. lectura de datos
    leer("temperaturas.txt",t);
-   //2. matriz de temperaturas
    mostrar(t);
-   //3 y 4. promedios por sensor y por intervalo
    promedios(t,psen,pint);
-   //5. temperatura maxima y minima
    maxi=mini=t[0][0];
    smax=smin=imax=imin=0;
    for(i=0;i<F;i++){
@@ -35,10 +31,8 @@ int main(){
          }
       }
    }
-   //6. variacion de cada sensor
    for(j=0;j<S;j++)
       delta[j]=t[F-1][j]-t[0][j];
-   //7. sensor con mayor incremento
    sinc=0;
    iguales=1;
    for(j=1;j<S;j++){
@@ -47,7 +41,6 @@ int main(){
       if(delta[j]!=delta[0])
          iguales=0;
    }
-   //resultados en pantalla
    printf("\nTemperatura promedio por sensor:");
    for(j=0;j<S;j++)
       printf("\n   S%d: %.2f",j+1,psen[j]);
@@ -65,7 +58,6 @@ int main(){
       printf("\nTodos los sensores presentan el mismo incremento");
    else
       printf("\nSensor con mayor incremento: S%d",sinc+1);
-   //8. reporte
    reporte("reporte.txt",t,psen,pint,delta,maxi,smax,imax,
            mini,smin,imin,sinc,iguales);
    printf("\nSe genero el archivo reporte.txt\n");
@@ -97,7 +89,6 @@ void mostrar(float t[][S]){
    printf("\n");
 }
 
-//psen: promedio de cada columna, pint: promedio de cada renglon
 void promedios(float t[][S],float psen[],float pint[]){
    int i,j;
    for(j=0;j<S;j++){

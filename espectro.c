@@ -11,16 +11,13 @@ void reporte(char *archivo,float wl[],float inten[],float suave[],int n,
 int main(){
    float wl[MAX],inten[MAX],inten_suave[MAX],picos[MAX],umbral;
    int ipico[MAX],n,k,np,i;
-   //carga de datos
    n=cargar("espectro.dat",wl,inten);
    printf("\nSe leyeron %d puntos de espectro.dat",n);
    printf("\nTamano de la ventana w=2k+1, ingrese k: ");
    scanf("%d",&k);
    printf("Ingrese el umbral: ");
    scanf("%f",&umbral);
-   //suavizado por promedio movil
    suavizar(inten,inten_suave,n,k);
-   //deteccion de picos
    np=detectar(wl,inten_suave,n,umbral,picos,ipico);
    printf("\nVentana w = %d (k = %d), umbral = %.1f",2*k+1,k,umbral);
    printf("\nPicos encontrados: %d",np);
@@ -28,13 +25,11 @@ int main(){
       printf("\n   Indice %d   lambda = %.1f nm   I = %.2f",
              ipico[i],picos[i],inten_suave[ipico[i]]);
    }
-   //reporte
    reporte("reporte.txt",wl,inten,inten_suave,n,picos,ipico,np);
    printf("\nSe genero el archivo reporte.txt\n");
    return 0;
 }
 
-//lee lambda e intensidad, regresa el numero de filas leidas
 int cargar(char *archivo,float wl[],float inten[]){
    FILE *fp;
    int n=0;
@@ -52,7 +47,6 @@ int cargar(char *archivo,float wl[],float inten[]){
    return n;
 }
 
-//promedio movil de ventana w=2k+1, los extremos se copian
 void suavizar(float inten[],float suave[],int n,int k){
    int i,m;
    float suma;
@@ -68,7 +62,6 @@ void suavizar(float inten[],float suave[],int n,int k){
    }
 }
 
-//maximos locales interiores que superan el umbral
 int detectar(float wl[],float suave[],int n,float umbral,
              float picos[],int ipico[]){
    int i,np=0;
