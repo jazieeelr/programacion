@@ -37,13 +37,17 @@ int cargar(char *archivo,float wl[],float inten[]){
       printf("ERROR: No se puede abrir el archivo %s\n",archivo);
       exit(1);
    }
-   while(n<MAX&&fscanf(fp,"%f %f",&wl[n],&inten[n])==2)
-      n++;
-   fclose(fp);
-   if(n==0){
+   fseek(fp,0L,SEEK_END);
+   if(ftell(fp)==0){
       printf("ERROR: El archivo %s esta vacio\n",archivo);
       exit(1);
    }
+   rewind(fp);
+   while(!feof(fp)&&n<MAX){
+      fscanf(fp,"%f %f\n",&wl[n],&inten[n]);
+      n++;
+   }
+   fclose(fp);
    return n;
 }
 

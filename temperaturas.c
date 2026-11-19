@@ -15,8 +15,12 @@ int main(){
    leer("temperaturas.txt",t);
    mostrar(t);
    promedios(t,psen,pint);
-   maxi=mini=t[0][0];
-   smax=smin=imax=imin=0;
+   maxi=t[0][0];
+   mini=t[0][0];
+   smax=0;
+   smin=0;
+   imax=0;
+   imin=0;
    for(i=0;i<F;i++){
       for(j=0;j<S;j++){
          if(t[i][j]>maxi){
