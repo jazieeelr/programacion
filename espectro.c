@@ -35,14 +35,16 @@ int main(){
    for(i=0;i<total_puntos;i++){
       if(i<vecinos){
          inten_suave[i]=inten[i];
-      }else if(i>=total_puntos-vecinos){
-         inten_suave[i]=inten[i];
       }else{
-         suma=0;
-         for(m=-vecinos;m<=vecinos;m++){
-            suma=suma+inten[i+m];
+         if(i>=total_puntos-vecinos){
+            inten_suave[i]=inten[i];
+         }else{
+            suma=0;
+            for(m=-vecinos;m<=vecinos;m++){
+               suma=suma+inten[i+m];
+            }
+            inten_suave[i]=suma/ventana;
          }
-         inten_suave[i]=suma/ventana;
       }
    }
 
