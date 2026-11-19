@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX 1000
 int cargar(char *archivo,float wl[],float inten[]);
 void suavizar(float inten[],float suave[],int n,int k);
 int detectar(float wl[],float suave[],int n,float umbral,
@@ -9,8 +8,8 @@ void reporte(char *archivo,float wl[],float inten[],float suave[],int n,
              float picos[],int ipico[],int np);
 
 int main(){
-   float wl[MAX],inten[MAX],inten_suave[MAX],picos[MAX],umbral;
-   int ipico[MAX],n,k,np,i;
+   float wl[1000],inten[1000],inten_suave[1000],picos[1000],umbral;
+   int ipico[1000],n,k,np,i;
    n=cargar("espectro.dat",wl,inten);
    printf("\nSe leyeron %d puntos de espectro.dat",n);
    printf("\nTamano de la ventana w=2k+1, ingrese k: ");
@@ -43,7 +42,7 @@ int cargar(char *archivo,float wl[],float inten[]){
       exit(1);
    }
    rewind(fp);
-   while(!feof(fp)&&n<MAX){
+   while(!feof(fp)&&n<1000){
       fscanf(fp,"%f %f\n",&wl[n],&inten[n]);
       n++;
    }
