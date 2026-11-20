@@ -10,25 +10,29 @@ int main(){
    int sensor_maxima,intervalo_maxima,sensor_minima,intervalo_minima;
    int sensor_mayor_incremento,todos_iguales;
 
-   if((archivo=fopen("temperaturas.txt","w"))==NULL){
-      printf("ERROR: No se puede abrir el archivo temperaturas.txt\n");
-      exit(1);
-   }
-   for(intervalo=0;intervalo<6;intervalo++){
-      printf("\nIntervalo %d",intervalo+1);
-      for(sensor=0;sensor<5;sensor++){
-         printf("\nIngrese la temperatura del sensor S%d: ",sensor+1);
-         scanf("%f",&dato);
-         fprintf(archivo,"%f ",dato);
-      }
-      fprintf(archivo,"\n");
-   }
-   fclose(archivo);
-   printf("\nSe genero el archivo temperaturas.txt\n");
-
    if((archivo=fopen("temperaturas.txt","r"))==NULL){
-      printf("ERROR: No se puede abrir el archivo temperaturas.txt\n");
-      exit(1);
+      printf("\nNo existe el archivo temperaturas.txt, se va a crear\n");
+      if((archivo=fopen("temperaturas.txt","w"))==NULL){
+         printf("ERROR: No se puede crear el archivo temperaturas.txt\n");
+         exit(1);
+      }
+      for(intervalo=0;intervalo<6;intervalo++){
+         printf("\nIntervalo %d",intervalo+1);
+         for(sensor=0;sensor<5;sensor++){
+            printf("\nIngrese la temperatura del sensor S%d: ",sensor+1);
+            scanf("%f",&dato);
+            fprintf(archivo,"%f ",dato);
+         }
+         fprintf(archivo,"\n");
+      }
+      fclose(archivo);
+      printf("\nSe genero el archivo temperaturas.txt\n");
+      if((archivo=fopen("temperaturas.txt","r"))==NULL){
+         printf("ERROR: No se puede abrir el archivo temperaturas.txt\n");
+         exit(1);
+      }
+   }else{
+      printf("\nSe abrio el archivo temperaturas.txt para lectura\n");
    }
    for(intervalo=0;intervalo<6;intervalo++){
       for(sensor=0;sensor<5;sensor++){
