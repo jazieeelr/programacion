@@ -5,10 +5,26 @@ int main(){
    FILE *archivo;
    float temperatura[6][5];
    float promedio_sensor[5],promedio_intervalo[6],incremento[5];
-   float suma,temp_maxima,temp_minima;
+   float dato,suma,temp_maxima,temp_minima;
    int intervalo,sensor;
    int sensor_maxima,intervalo_maxima,sensor_minima,intervalo_minima;
    int sensor_mayor_incremento,todos_iguales;
+
+   if((archivo=fopen("temperaturas.txt","w"))==NULL){
+      printf("ERROR: No se puede abrir el archivo temperaturas.txt\n");
+      exit(1);
+   }
+   for(intervalo=0;intervalo<6;intervalo++){
+      printf("\nIntervalo %d",intervalo+1);
+      for(sensor=0;sensor<5;sensor++){
+         printf("\nIngrese la temperatura del sensor S%d: ",sensor+1);
+         scanf("%f",&dato);
+         fprintf(archivo,"%f ",dato);
+      }
+      fprintf(archivo,"\n");
+   }
+   fclose(archivo);
+   printf("\nSe genero el archivo temperaturas.txt\n");
 
    if((archivo=fopen("temperaturas.txt","r"))==NULL){
       printf("ERROR: No se puede abrir el archivo temperaturas.txt\n");
